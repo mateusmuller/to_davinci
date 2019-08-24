@@ -23,7 +23,7 @@
 #
 # COMO USAR?
 #
-# $ ./to_davinci /home/mateus/Vídeos
+# $ to_davinci /home/mateus/Vídeos
 #
 # ------------------------------------------------------------------------ #
 # Changelog:
