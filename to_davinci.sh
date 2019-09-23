@@ -30,6 +30,8 @@
 #
 #   v1.0 07/03/2019, Mateus Müller:
 #     - Primeira versão com bugs! Hahaha
+#   v1.1 23/09/2019, Mateus Müller
+#     - Corrigido bug no find com "\" e identado
 #
 # ------------------------------------------------------------------------ #
 # Tested on:
@@ -43,11 +45,11 @@ IFS=$'\n'
 #
 # Faz um "for" buscando todas as músicas, mas deixando somente o diretório, sem o nome
 # do arquivo.
-for diretorio_conversao in $(find "$DESTINO_CONVERTER" -type f \( -iname *.mov \
-                                                    -o -iname *.mp4 \
-                                                    -o -iname *.mkv \
-                                                    -o -iname *.webm \) \
-                                                    -printf "%h\n")
+for diretorio_conversao in $(find "$DESTINO_CONVERTER" -type f \( -iname \*.mov \
+                                                               -o -iname \*.mp4 \
+                                                               -o -iname \*.mkv \
+                                                               -o -iname \*.webm \) \
+                                                               -printf "%h\n")
 do
   # Diretório convertidos existe? Se não, crie!
   [ ! -d "$diretorio_conversao/convertidos" ] && mkdir "$diretorio_conversao/convertidos"
@@ -57,11 +59,11 @@ do
   [ "$ultimo_diretorio" != "$diretorio_conversao" ] && {
 
     # Mesma busca de antes, mas agora mostra somente o nome do arquivo
-    for arquivo_conversao in $(find "$diretorio_conversao" -type f \( -iname *.mov \
-                                                        -o -iname *.mp4 \
-                                                        -o -iname *.mkv \
-                                                        -o -iname *.webm \) \
-                                                        -printf "%f\n")
+    for arquivo_conversao in $(find "$diretorio_conversao" -type f \( -iname \*.mov \
+                                                                   -o -iname \*.mp4 \
+                                                                   -o -iname \*.mkv \
+                                                                   -o -iname \*.webm \) \
+                                                                   -printf "%f\n")
     do
 
       # O arquivo já foi convertido? Se não, vamos converter!
