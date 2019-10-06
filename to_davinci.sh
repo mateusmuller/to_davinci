@@ -15,7 +15,7 @@
 # Recebe como parâmetro um diretório e faz uma busca recursiva de TODOS os vídeos nos
 # formatos mov, mp4, mkv e webm, convertendo para o codec do DaVinci.
 #
-# CONFIGURATION?
+# CONFIGURAÇÃO?
 # Eu geralmente mantenho o script no /home do usuário e crio um link simbólico
 # para algum diretório na variável PATH.
 #
@@ -32,9 +32,12 @@
 #     - Primeira versão com bugs! Hahaha
 #   v1.1 23/09/2019, Mateus Müller
 #     - Corrigido bug no find com "\" e identado
+#   v1.2 06/10/2019, Mateus Müller
+#     - Adicionado "uniq" e removido a gambi do último diretório
+#     - Corrigido alguns comentários de EN para PT
 #
 # ------------------------------------------------------------------------ #
-# Tested on:
+# Testado em:
 #   bash 5.0.3
 # ------------------------------------------------------------------------ #
 #
@@ -49,15 +52,12 @@ for diretorio_conversao in $(find "$DESTINO_CONVERTER" -type f \( -iname \*.mov 
                                                                -o -iname \*.mp4 \
                                                                -o -iname \*.mkv \
                                                                -o -iname \*.webm \) \
-                                                               -printf "%h\n")
+                                                               -printf "%h\n" | \
+                                                               sort | \
+                                                               uniq)
 do
   # Diretório convertidos existe? Se não, crie!
   [ ! -d "$diretorio_conversao/convertidos" ] && mkdir "$diretorio_conversao/convertidos"
-
-  # Só vai fazer conversão se o diretório for diferente, porque pode repetir o diretório
-  # se houver mais de um arquivo no mesmo.
-  [ "$ultimo_diretorio" != "$diretorio_conversao" ] && {
-
     # Mesma busca de antes, mas agora mostra somente o nome do arquivo
     for arquivo_conversao in $(find "$diretorio_conversao" -type f \( -iname \*.mov \
                                                                    -o -iname \*.mp4 \
@@ -65,7 +65,6 @@ do
                                                                    -o -iname \*.webm \) \
                                                                    -printf "%f\n")
     do
-
       # O arquivo já foi convertido? Se não, vamos converter!
       [ ! -f "$diretorio_conversao/convertidos/${arquivo_conversao%.*}.mov" ] && {
         ffmpeg -i "$diretorio_conversao/$arquivo_conversao" -codec:v mpeg4 \
@@ -75,9 +74,5 @@ do
                                                             "$diretorio_conversao/convertidos/${arquivo_conversao%.*}.mov"
       }
     done
-  }
-
-  # Muda o diretório temporário para comparar acima
-  ultimo_diretorio="$diretorio_conversao"
 done
 # ------------------------------------------------------------------------ #
